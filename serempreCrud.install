@@ -1,0 +1,24 @@
+<?php 
+
+function serempreCrud_schema() {
+    $schema['myusers'] = array(
+        'description' => 'Tabla para el manejo de usuarios',
+        'fields' => array(
+            'id' => array(
+            'type' => 'serial',
+            'unsigned' => TRUE,
+            'not null' => TRUE,
+            ),  
+            'nombre' => array(
+            'type' => 'varchar',
+            'length' => 255,
+            'not null' => TRUE,
+            'default' => '',
+            ),
+        ),
+        'primary key' => array(
+            'id',
+        ),
+    );
+    return $schema;
+}

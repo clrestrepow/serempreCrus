@@ -1,0 +1,3 @@
+name = SerempreCrud
+description = Modulo para el manejor de Usuarios 
+core = 7.x

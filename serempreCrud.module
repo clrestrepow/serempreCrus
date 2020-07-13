@@ -1,0 +1,50 @@
+<?php 
+
+function serempreCrud_menu() {
+  $items = array(
+    'usuario/registro' => array(
+      'title' => t('Registro de Usuarios'),
+      'page callback' => 'form_registro',
+      'access callback' => TRUE,
+      'type' => MENU_NORMAL_ITEM,
+    )
+  );
+  return $items;
+}
+function form_registro() {
+ return drupal_get_form('serempre_crud_form_registro');
+}
+function serempre_crud_form_registro($form, &$form_state) {
+  $form['nombre'] = array(
+  '#type' => 'textfield',
+  '#title' => t('Nombre'),
+  '#required' => TRUE,
+  );
+  $form['submit'] = array(
+  '#type' => 'submit',
+  '#value' => t('Registrarlo'),
+  );
+  $form['#attached']['js'][] = array
+  (
+    'type' => 'file',
+    'data' => drupal_get_path('module', 'serempreCrud') . '/js/validate.js',
+  );
+  return $form;
+}
+function serempre_crud_form_registro_submit($form, &$form_state) {
+  $result = db_select('myusers', 'mu')
+    ->fields('mu')
+    ->condition('mu.nombre', $form_state['values']['nombre'], '=')
+    ->execute()
+    ->fetchAssoc();
+  if (!empty($result)) {
+    drupal_set_message("Este nombre de usuario ya esta en uso", 'error');
+  } else {
+    $query=db_insert('myusers')
+      ->fields(array(
+        'nombre' => $form_state['values']['nombre']
+      ))
+      ->execute();
+      drupal_set_message("Usuario insertado correctamente con el id: ". $query);
+  }
+}
